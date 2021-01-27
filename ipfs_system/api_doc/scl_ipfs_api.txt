@@ -1,0 +1,449 @@
+DOCUMENT : SCL IPFS API 
+STATUS : DRAFT
+VERSON : 0.0.3
+
+1. CREATE SERVER
+
+endpoint: /api/ipfs/server
+method: POST
+request body:
+	directory : string : required : fully qualified directory path
+	tag : string : optional 
+	swarm_port : integer : optional
+	api_port : integer : optional
+	gateway_port : integer : optional
+	max_dir_size : integer : optional : this will be in terms of gigabytes : defaults to 100
+	
+response:
+
+[SUCCESS]
+{
+  "status": "SUCCESS",
+  "data": {
+    "id": 1,
+    "directory": "/home/temp/my_projects/scl/ipfs_system/tests/dir1",
+    "tag": "",
+    "swarm_port": 4002,
+    "api_port": 5002,
+    "gateway_port": 8082,
+    "max_dir_size": 50,
+    "peer_id": "QmbCfVUwpMA2an8Y71pDy9yCZonv7mHaHfBcmeKeoe3p3N"
+  }
+}
+
+[FAIL]
+{
+  "status": "FAILED",
+  "data": {}
+}
+
+2. DELETE SERVER
+
+endpoint: /api/ipfs/server/<id>
+method: DELETE
+params:
+	id : integer : required
+response:
+	
+[SUCCESS]
+{
+  "status": "SUCCESS",
+  "data": {}
+}
+
+[FAIL]
+{
+  "status": "FAILED",
+  "data": {}
+}
+
+3. UPDATE SERVER
+
+endpoint: /api/ipfs/server/<id>
+method: PUT
+params: 
+	id : integer : required
+request body:
+	tag : string : optional
+	swarm_port : integer : optional
+	api_port : integer : optional
+	gateway_port : integer : optional
+	max_dir_size : integer : this will be in terms of gigabytes
+	is_private : integer : 0 (False) 1 (True)
+	
+response:
+
+[SUCCESS]
+{
+  "status": "SUCCESS",
+  "data": {
+    "id": 1,
+    "directory": "/home/temp/my_projects/scl/ipfs_system/tests/dir1",
+    "tag": "avengers",
+    "swarm_port": 4002,
+    "api_port": 5002,
+    "gateway_port": 8082,
+    "max_dir_size": 50,
+    "peer_id": "QmbCfVUwpMA2an8Y71pDy9yCZonv7mHaHfBcmeKeoe3p3N",
+    "pid": 6185
+  }
+}
+
+[FAIL]
+{
+  "status": "FAILED",
+  "data": {}
+}
+
+4. GET SERVERS
+
+endpoint: /api/ipfs/server/all
+method: GET
+params:
+	page : integer : optional : default 1
+	records : integer : optional : default 10
+	
+response:
+
+[SUCCESS]
+{
+  "status": "SUCCESS",
+  "data": [
+    {
+      "id": 1,
+      "directory": "/home/temp/my_projects/scl/ipfs_system/tests/dir1",
+      "tag": "",
+      "swarm_port": 4002,
+      "api_port": 5002,
+      "gateway_port": 8082,
+      "max_dir_size": 50,
+      "peer_id": "QmbCfVUwpMA2an8Y71pDy9yCZonv7mHaHfBcmeKeoe3p3N"
+    }
+  ]
+}
+
+[FAIL]
+{
+  "status": "FAILED",
+  "data": {}
+}
+
+5. START SERVER
+
+endpoint: /api/ipfs/server/<id>/start
+method: PUT
+params:
+	id : integer : required
+	
+response:
+
+[SUCCESS]
+{
+  "status": "SUCCESS",
+  "data": {
+    "pid": 6146
+  }
+}
+
+[FAIL]
+{
+  "status": "FAILED",
+  "data": {}
+}
+
+6. STOP SERVER
+
+endpoint: /api/ipfs/server/<id>/stop
+method: PUT
+params:
+	id : integer : required
+response:
+	
+[SUCCESS]
+{
+  "status": "SUCCESS",
+  "data": {}
+}
+
+[FAIL]
+{
+  "status": "FAILED",
+  "data": {}
+}
+
+
+7. RESTART SERVER
+
+endpoint: /api/ipfs/server/<id>/restart
+method: PUT
+params:
+	id : integer : required
+response:
+
+[SUCCESS]
+{
+  "status": "SUCCESS",
+  "data": {
+    "pid": 7092
+  }
+}
+
+[FAIL]
+{
+  "status": "FAILED",
+  "data": {}
+}
+
+
+8. UPLOAD FILE
+
+endpoint:  /api/ipfs/file
+method: POST
+request body:
+	fqfp : string : required : fully qualified file path
+	server_id : integer : required
+	tag : string : optional
+	
+response:
+
+[SUCCESS]
+{
+  "status": "SUCCESS",
+  "data": {
+    "id": {
+      "id": 1,
+      "fqfp": "/home/temp/my_projects/scl/ipfs_system/tests/test_image.png",
+      "filename": "test_image.png",
+      "tag": "",
+      "server_id": 0,
+      "size": 116752,
+      "ipfs_hash": "",
+      "ipns_key_id": 0,
+      "upload_status": 0,
+      "is_active": 1
+    }
+  }
+}
+
+[FAIL]
+{
+  "status": "FAILED",
+  "data": {}
+}
+
+
+9. DELETE FILE
+
+endpoint: api/ipfs/file/<id>
+method: DELETE
+params:
+	id : integer
+	
+response:
+[SUCCESS]
+{
+  "status": "SUCCESS",
+  "data": {}
+}
+
+[FAIL]
+{
+  "status": "FAILED",
+  "data": {}
+}
+
+
+10. GET FILES
+
+endpoint: /api/ipfs/file/all
+method: GET
+params:
+	page : integer : optional : default 1
+	records : integer : optional : default 10
+	
+[SUCCESS]
+{
+  "status": "SUCCESS",
+  "data": [
+    {
+      "id": 1,
+      "fqfp": "/home/temp/my_projects/scl/ipfs_system/tests/test_image.png"",
+      "filename": "test_image.png",
+      "tag": "",
+      "server_id": 1,
+      "size": 116752,
+      "ipfs_hash": "QmPzkPCUCSzTNwWmDhZTh3vE2oK4NwxATF1j88ofn6eyFc",
+      "ipns_key_id": 0,
+      "upload_status": 2,
+      "is_active": 1
+    }
+  ]
+}
+
+[FAIL]
+{
+  "status": "FAILED",
+  "data": {}
+}
+
+	
+11. PING SERVER
+
+endpoint: /api/ipfs/server/<id>/stop
+method: GET
+params:
+	id : integer : required
+response:
+	
+[SUCCESS]
+{
+  "status": "SUCCESS",
+  "data": {}
+}
+
+[FAIL]
+{
+  "status": "FAILED",
+  "data": {}
+}
+
+12. CREATE IPNS KEY
+
+endpoint: /api/ipns/key
+method: POST
+params:
+	key : string : required
+	server_id : integer : required
+response:
+
+[SUCCESS]
+{
+  "status": "SUCCESS",
+  "data": {
+    "id": 1,
+    "key": "doctorstrange",
+    "ipns_hash": "QmVy5CGft1ujZhCV1w9vujGbSddWSpaREnk9EgXLYGrwVH",
+    "server_id": 1,
+    "is_active": 1
+  }
+}
+
+[FAIL]
+{
+  "status": "FAILED",
+  "data": {}
+}	
+
+13. PUBLISH KEY
+
+endpoint: /api/ipns/publish
+method: POST
+params:
+	key_id : integer : record id of key
+	file_id : integer : record id of uploaded file
+	ttl = integer :  number of hours that IPNS hash is resolvable to the IPFS hash
+	
+response:
+
+[SUCCESS]
+{
+  "status": "SUCCESS",
+  "data": {
+    "id": 1,
+    "fqfp": "\/home\/crowdmetric-ivar\/my_projects\/scl\/ipfs_system\/tests\/test_image.png",
+    "filename": "test_image.png",
+    "tag": "",
+    "server_id": 1,
+    "size": 116752,
+    "ipfs_hash": "QmPzkPCUCSzTNwWmDhZTh3vE2oK4NwxATF1j88ofn6eyFc",
+    "ipns_key_id": 1,
+    "upload_status": 2,
+    "is_active": 1,
+    "ipns_info": {
+      "id": 1,
+      "key": "doctorstrange",
+      "ipns_hash": "QmVy5CGft1ujZhCV1w9vujGbSddWSpaREnk9EgXLYGrwVH",
+      "server_id": 1,
+      "is_active": 1
+    }
+  }
+}
+
+[FAIL]
+{
+  "status": "FAILED",
+  "data": {}
+}	
+
+14. DELETE KEY
+endpoint: /api/ipns/key/<id>
+method: DELETE
+params:
+	id : integer
+
+response:
+	
+[SUCCESS]
+{
+  "status": "SUCCESS",
+  "data": {}
+}
+
+[FAIL]
+{
+  "status": "FAILED",
+  "data": {}
+}
+
+14. GET KEYS
+
+endpoint: /api/ipns/key/all
+method: GET
+params:
+	page : integer : optional : default 1
+	records : integer : optional : default 10
+	
+response:
+
+[SUCCESS]
+{
+  "status": "SUCCESS",
+  "data": [
+    {
+      "id": 1,
+      "key": "doctorstrange",
+      "ipns_hash": "QmVy5CGft1ujZhCV1w9vujGbSddWSpaREnk9EgXLYGrwVH",
+      "server_id": 1,
+      "is_active": 1
+    }
+  ]
+}
+
+[FAIL]
+{
+  "status": "FAILED",
+  "data": {}
+}
+
+
+14. TEST SERVER STORAGE AVAILABILITY
+
+endpoint: /api/ipfs/server/<id>/test
+method: GET
+params:
+	id : integer : required : this is the server_id to test if a file
+	fqfp : string : required : fully qualified file path
+	
+response:
+
+[SUCCESS]
+{
+  "status": "SUCCESS",
+  "data": {}
+}
+
+[FAIL]
+{
+  "status": "FAILED",
+  "data": {}
+}
